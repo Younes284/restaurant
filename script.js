@@ -1,98 +1,107 @@
-const types = [
-      {
-        id:"burger",
-        type: "burger",
-      },
-      {
-        id:"pizza",
-        type: "pizza",
-      },
-      {
-        id:"snack",
-        type: "snack",
-      },
-      {
-        id:"drink",
-        type: "drink",
-      },
-      {
-        id:"dessert",
-        type: "dessert",
-      },
-
-      {
-        id:"salad",
-        type:"salad"
-      }
+const categories = [
+  {
+    id: 1,
+    type: "burger",
+  },
+  {
+    id: 2,
+    type: "pizza",
+  },
+  {
+    id: 3,
+    type: "snack",
+  },
+  {
+    id: 4,
+    type: "drink",
+  },
+  {
+    id: 5,
+    type: "dessert",
+  },
+  {
+    id: 6,
+    type: "salad",
+  },
 ];
 
-const burgerlist=[
-    {
-        name:"beef burger",price:"3$"
-    },
-    {
-        name:"cheese burger",price:"4$"
-    },
-]
-const pizzalist=[
-    {
-        name:"veg burger",price:"5$"    
-    },
-    {
-        name:"peperoni burger",price:"7$"
-    },
-]
-const snacklist=[]
-const drinklist=[]
-const dessertlist=[]
+const products = [
+  {
+    id: 1,
+    name: "beef burger",
+    price: "3$",
+    categoryId: 1,
+  },
+  {
+    id: 2,
+    name: "cheese burger",
+    price: "4$",
+    categoryId: 2,
+  },
+  {
+    id: 3,
+    name: "veg burger",
+    price: "5$",
+    categoryId: 3,
+  },
+  {
+    id: 4,
+    name: "peperoni burger",
+    price: "7$",
+    categoryId: 4,
+  },
+];
 
-const typeDisplayDiv = document.getElementById('typeDisplay');
+// render categories
+const ulElement = document.querySelector("#categories-parent");
 
-const ulElement = document.createElement('ul');
- ulElement.style.listStyleType = 'none';
- ulElement.style.display = 'flex';
- ulElement.style.flexDirection = 'row';
- ulElement.style.justifyContent=' center';
-
-
-for (const item of types) {
-  const buttonElement = document.createElement('button');
+for (const item of categories) {
+  const buttonElement = document.createElement("button");
   buttonElement.textContent = item.type;
-  buttonElement.type = 'button';
-  buttonElement.style.margin='20px',
-  buttonElement.style.fontSize='40px',
-  buttonElement.style.padding='20px',
-  buttonElement.style.border = '1px solid ',
-  
+  buttonElement.type = "button";
 
-  buttonElement.onmouseover=function() {
-    buttonElement.style.backgroundColor = 'yellow';
-    buttonElement.style.color = 'white';
-  }
-  buttonElement.onmouseout = function() {
-    buttonElement.style.backgroundColor = 'white';
-    buttonElement.style.color = 'black';
+  // attach the category id to the button
+  buttonElement.setAttribute("id", item.id);
+
+  // add even listener
+  buttonElement.addEventListener("click", () => {
+    console.log("btn id: ", item.id);
+  });
+
+  // btn styles
+  buttonElement.style.margin = "20px";
+  buttonElement.style.fontSize = "40px";
+  buttonElement.style.padding = "20px";
+  buttonElement.style.border = "1px solid ";
+
+  // btn hover styles
+  buttonElement.onmouseover = function () {
+    buttonElement.style.backgroundColor = "yellow";
+    buttonElement.style.color = "white";
   };
+  buttonElement.onmouseout = function () {
+    buttonElement.style.backgroundColor = "white";
+    buttonElement.style.color = "black";
+  };
+
+  // append button to ul
   ulElement.appendChild(buttonElement);
-
-  
 }
-typeDisplayDiv.appendChild(ulElement);
 
+// render products
+const productsParent = document.querySelector("#foodDisplay");
+products.forEach((product) => {
+  const divElement = document.createElement("div");
+  divElement.classList.add("flex", "space-x-3");
 
+  divElement.innerHTML = `
+  <img src="https://cdn.sanity.io/images/f5uukjzq/production/18d89cfa5552c60a11060d945db03db7d44c6b7b-3384x3076.jpg" class="w-32" />
 
-  
+  <div>
+    <h2>${product.name}</h2>
+    <span>${product.price}</span>
+  </div>
+  `;
 
-
-
-
-
-
-
-
-  
-  
-  
-
-
-
+  productsParent.appendChild(divElement);
+});

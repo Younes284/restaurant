@@ -1,65 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Menu</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./styles.css" />
     <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-</head>
-<body class="justify-center items-center w-full pt-7 ">
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      html,
+      body {
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
+  <body class="justify-center items-center w-full pt-7">
     <div class="items-center justify-center flex flex-col">
-        <img src="logo.png" alt="img">
-        <h1 class="text-6xl py-3">Tortilla House</h1>
-        <p class="text-3xl py-3">for fast food,delicious food,and burgers!</p>
-        <img src="img.jpg" alt="img">
+      <img src="logo.png" alt="img" />
+      <h1 class="text-6xl py-3">Tortilla House</h1>
+      <p class="text-3xl py-3">for fast food,delicious food,and burgers!</p>
+      <img src="img.jpg" alt="img" />
     </div>
     <div class="flex py-8 justify-center">
-        <input 
+      <input
         id="search"
         type="text"
         placeholder="Search for a dish..."
-        class=" py-4 border-2  border-solid text-4xl  text-center rounded-3xl shadow-sm mx-4" >
+        class="py-4 border-2 border-solid text-4xl text-center rounded-3xl shadow-sm mx-4"
+      />
 
-        <select class="font-bold text-2xl p-3 rounded-lg shadow-md mx-4 "> 
-            <option value="disabled selected">sort by</option>
-            <option id="Mostexpensive"> Most Expensive</option>
-            <option id="chepest"> Chepest </option>
-        </select>
+      <select class="font-bold text-2xl p-3 rounded-lg shadow-md mx-4">
+        <option value="disabled selected">sort by</option>
+        <option id="Mostexpensive">Most Expensive</option>
+        <option id="chepest">Chepest</option>
+      </select>
     </div>
 
-    <div id="typeDisplay" > </div>
+    <ul id="categories-parent" class="flex items-center overflow-x-auto"></ul>
 
     <div class="font-bold text-3xl p-6">Explore Our Tasty Menu</div>
 
-    <div id="foodDisplay"> </div>
+    <div id="foodDisplay" class="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
 
     <div>
-        <div class="bg-amber-300 font-bold text-4xl text-center py-10">You Can Find Us Here!</div>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d8317.145771889842!2d35.5160174!3d33.4147077!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151eebf1543ec601%3A0x75910d71b9dbb969!2z2YXYudmF2YQg2KfZhNio2KfZhiDZiCDYp9is2KjYp9mGINin2YTYt9mK2KggYWwgdGF5ZWIgZGlhcnk!5e1!3m2!1sen!2slb!4v1692944038798!5m2!1sen!2slb" width="100%" height="500" style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    <div class="grid grid-cols-3 justify-center text-center text-3xl py-12">
+      <div class="bg-amber-300 font-bold text-4xl text-center py-10">
+        You Can Find Us Here!
+      </div>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d8317.145771889842!2d35.5160174!3d33.4147077!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151eebf1543ec601%3A0x75910d71b9dbb969!2z2YXYudmF2YQg2KfZhNio2KfZhiDZiCDYp9is2KjYp9mGINin2YTYt9mK2KggYWwgdGF5ZWIgZGlhcnk!5e1!3m2!1sen!2slb!4v1692944038798!5m2!1sen!2slb"
+        width="100%"
+        height="500"
+        style="border: 0"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+      <div class="grid grid-cols-3 justify-center text-center text-3xl py-12">
         <div>
-            <i class="fa-solid fa-location-dot " ></i>
-            <p>Arabsalim - Nabatieh - Lebanon</p>
+          <i class="fa-solid fa-location-dot"></i>
+          <p>Arabsalim - Nabatieh - Lebanon</p>
         </div>
         <div>
-            <i class="fa-solid fa-clock"></i>
-           <p>Odiven From 10 AM to 10 PM</p> 
+          <i class="fa-solid fa-clock"></i>
+          <p>Odiven From 10 AM to 10 PM</p>
         </div>
         <div>
-            <i class="fa-solid fa-phone"></i>
-            <p>/025608 - 03/909194</p>
+          <i class="fa-solid fa-phone"></i>
+          <p>/025608 - 03/909194</p>
         </div>
-    </div>
+      </div>
     </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
