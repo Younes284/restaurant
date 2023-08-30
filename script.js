@@ -56,6 +56,8 @@ window.onload = () => {
   renderProducts(products);
 };
 
+let selectedCategoryId = null;
+
 // render categories
 const ulElement = document.querySelector("#categories-parent");
 
@@ -64,16 +66,34 @@ for (const item of categories) {
   buttonElement.textContent = item.type;
   buttonElement.type = "button";
 
-  // attach the category id to the button
+  // attach the category id to the button (needed for highlighting the selected button)
   buttonElement.setAttribute("id", item.id);
 
   // add even listener
   buttonElement.addEventListener("click", (event) => {
-    const clickedBtnId = event.target.id;
+    const clickedBtnId = Number(event.target.id);
 
-    // filter products
-    const filteredProducts = products.filter(
-      (product) => product.categoryId === Number(clickedBtnId)
+    // if the user clicked the same button again, remove the filter
+    if (selectedCategoryId === clickedBtnId) selectedCategoryId = null;
+    // else set the selectedCategoryId to the clicked button id
+    else selectedCategoryId = clickedBtnId;
+
+    // get all buttons to check wethere we should highlight the button or not
+    const buttons = document.querySelectorAll("#categories-parent button");
+
+    buttons.forEach((btn) => {
+      if (selectedCategoryId === Number(btn.id)) {
+        btn.style.backgroundColor = "yellow";
+        btn.style.color = "white";
+      } else {
+        btn.style.backgroundColor = "white";
+        btn.style.color = "black";
+      }
+    });
+
+    // filter products based on the selected category id, if no category id is selected, show all products, else show the products that have the same category id as the selected category id
+    const filteredProducts = products.filter((product) =>
+      selectedCategoryId ? product.categoryId === selectedCategoryId : true
     );
 
     renderProducts(filteredProducts);
@@ -86,14 +106,14 @@ for (const item of categories) {
   buttonElement.style.border = "1px solid ";
 
   // btn hover styles
-  buttonElement.onmouseover = function () {
-    buttonElement.style.backgroundColor = "yellow";
-    buttonElement.style.color = "white";
-  };
-  buttonElement.onmouseout = function () {
-    buttonElement.style.backgroundColor = "white";
-    buttonElement.style.color = "black";
-  };
+  // buttonElement.onmouseover = function () {
+  //   buttonElement.style.backgroundColor = "yellow";
+  //   buttonElement.style.color = "white";
+  // };
+  // buttonElement.onmouseout = function () {
+  //   buttonElement.style.backgroundColor = "white";
+  //   buttonElement.style.color = "black";
+  // };
 
   // append button to ul
   ulElement.appendChild(buttonElement);
