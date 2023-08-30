@@ -52,6 +52,10 @@ const products = [
   },
 ];
 
+window.onload = () => {
+  renderProducts(products);
+};
+
 // render categories
 const ulElement = document.querySelector("#categories-parent");
 
@@ -64,8 +68,15 @@ for (const item of categories) {
   buttonElement.setAttribute("id", item.id);
 
   // add even listener
-  buttonElement.addEventListener("click", () => {
-    console.log("btn id: ", item.id);
+  buttonElement.addEventListener("click", (event) => {
+    const clickedBtnId = event.target.id;
+
+    // filter products
+    const filteredProducts = products.filter(
+      (product) => product.categoryId === Number(clickedBtnId)
+    );
+
+    renderProducts(filteredProducts);
   });
 
   // btn styles
@@ -88,13 +99,19 @@ for (const item of categories) {
   ulElement.appendChild(buttonElement);
 }
 
-// render products
-const productsParent = document.querySelector("#foodDisplay");
-products.forEach((product) => {
-  const divElement = document.createElement("div");
-  divElement.classList.add("flex", "space-x-3");
+// it's job is to render the products to the DOM
+function renderProducts(products) {
+  const productsParent = document.querySelector("#foodDisplay");
 
-  divElement.innerHTML = `
+  // clear the products parent
+  productsParent.innerHTML = "";
+
+  // render products
+  products.forEach((product) => {
+    const divElement = document.createElement("div");
+    divElement.classList.add("flex", "space-x-3");
+
+    divElement.innerHTML = `
   <img src="https://cdn.sanity.io/images/f5uukjzq/production/18d89cfa5552c60a11060d945db03db7d44c6b7b-3384x3076.jpg" class="w-32" />
 
   <div>
@@ -103,5 +120,6 @@ products.forEach((product) => {
   </div>
   `;
 
-  productsParent.appendChild(divElement);
-});
+    productsParent.appendChild(divElement);
+  });
+}
