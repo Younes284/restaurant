@@ -1,122 +1,105 @@
-const categories = [
-  {
-    id: 1,
-    type: "burger",
-  },
-  {
-    id: 2,
-    type: "pizza",
-  },
-  {
-    id: 3,
-    type: "snack",
-  },
-  {
-    id: 4,
-    type: "drink",
-  },
-  {
-    id: 5,
-    type: "dessert",
-  },
-  {
-    id: 6,
-    type: "salad",
-  },
-];
+const PROJECT_ID = "g7b8yghy";
 
-const products = [
-  {
-    id: 1,
-    name: "beef burger",
-    price: "3$",
-    categoryId: 1,
-  },
-  {
-    id: 2,
-    name: "cheese burger",
-    price: "4$",
-    categoryId: 2,
-  },
-  {
-    id: 3,
-    name: "veg burger",
-    price: "5$",
-    categoryId: 3,
-  },
-  {
-    id: 4,
-    name: "peperoni burger",
-    price: "7$",
-    categoryId: 4,
-  },
-];
+const API_URL = `https://${PROJECT_ID}.api.sanity.io/v2023-08-20/data/query/production`;
 
-window.onload = () => {
-  renderProducts(products);
-};
+const IMAGES_URL = `https://cdn.sanity.io/images/${PROJECT_ID}/production`;
+
+let categories, products;
 
 let selectedCategoryId = null;
 
-// render categories
-const ulElement = document.querySelector("#categories-parent");
+async function getCategories() {
+  // get categories from API (sanity)
+  const response = await fetch(`${API_URL}?query=*[_type == "category"]`);
+  const data = await response.json();
 
-for (const item of categories) {
-  const buttonElement = document.createElement("button");
-  buttonElement.textContent = item.type;
-  buttonElement.type = "button";
+  categories = data.result.map((category) => ({
+    id: category._id,
+    title: category.title,
+  }));
 
-  // attach the category id to the button (needed for highlighting the selected button)
-  buttonElement.setAttribute("id", item.id);
+  renderCategories();
+}
 
-  // add even listener
-  buttonElement.addEventListener("click", (event) => {
-    const clickedBtnId = Number(event.target.id);
+async function getProducts() {
+  // get products from API (sanity)
+  const response = await fetch(`${API_URL}?query=*[_type == "product"]`);
+  const data = await response.json();
 
-    // if the user clicked the same button again, remove the filter
-    if (selectedCategoryId === clickedBtnId) selectedCategoryId = null;
-    // else set the selectedCategoryId to the clicked button id
-    else selectedCategoryId = clickedBtnId;
+  products = data.result.map((product) => ({
+    id: product._id,
+    title: product.title,
+    price: product.price,
+    description: product.description,
+    categoryId: product.category._ref,
+    image: `${IMAGES_URL}/${product.mainImage.asset._ref}`
+      .replace("image-", "")
+      .replace(/-(?=png|jpg|jpeg|gif)/, "."),
+  }));
 
-    // get all buttons to check wethere we should highlight the button or not
-    const buttons = document.querySelectorAll("#categories-parent button");
+  renderProducts(products);
+}
 
-    buttons.forEach((btn) => {
-      if (selectedCategoryId === Number(btn.id)) {
-        btn.style.backgroundColor = "yellow";
-        btn.style.color = "white";
-      } else {
-        btn.style.backgroundColor = "white";
-        btn.style.color = "black";
-      }
+function renderCategories() {
+  const ulElement = document.querySelector("#categories-parent");
+
+  for (const category of categories) {
+    const buttonElement = document.createElement("button");
+    buttonElement.textContent = category.title;
+    buttonElement.type = "button";
+
+    // attach the category id to the button (needed for highlighting the selected button)
+    buttonElement.setAttribute("id", category.id);
+
+    // add even listener
+    buttonElement.addEventListener("click", (event) => {
+      const clickedBtnId = Number(event.target.id);
+
+      // if the user clicked the same button again, remove the filter
+      if (selectedCategoryId === clickedBtnId) selectedCategoryId = null;
+      // else set the selectedCategoryId to the clicked button id
+      else selectedCategoryId = clickedBtnId;
+
+      // get all buttons to check wethere we should highlight the button or not
+      const buttons = document.querySelectorAll("#categories-parent button");
+
+      buttons.forEach((btn) => {
+        if (selectedCategoryId === Number(btn.id)) {
+          btn.style.backgroundColor = "yellow";
+          btn.style.color = "white";
+        } else {
+          btn.style.backgroundColor = "white";
+          btn.style.color = "black";
+        }
+      });
+
+      // filter products based on the selected category id, if no category id is selected, show all products, else show the products that have the same category id as the selected category id
+      const filteredProducts = products.filter((product) =>
+        selectedCategoryId ? product.categoryId === selectedCategoryId : true
+      );
+
+      renderProducts(filteredProducts);
     });
 
-    // filter products based on the selected category id, if no category id is selected, show all products, else show the products that have the same category id as the selected category id
-    const filteredProducts = products.filter((product) =>
-      selectedCategoryId ? product.categoryId === selectedCategoryId : true
-    );
+    // btn styles
+    buttonElement.style.margin = "20px";
+    buttonElement.style.fontSize = "40px";
+    buttonElement.style.padding = "20px";
+    buttonElement.style.border = "1px solid ";
 
-    renderProducts(filteredProducts);
-  });
+    // btn hover styles
+    // buttonElement.onmouseover = function () {
+    //   buttonElement.style.backgroundColor = "yellow";
+    //   buttonElement.style.color = "white";
+    // };
+    // buttonElement.onmouseout = function () {
+    //   buttonElement.style.backgroundColor = "white";
+    //   buttonElement.style.color = "black";
+    // };
 
-  // btn styles
-  buttonElement.style.margin = "20px";
-  buttonElement.style.fontSize = "40px";
-  buttonElement.style.padding = "20px";
-  buttonElement.style.border = "1px solid ";
-
-  // btn hover styles
-  // buttonElement.onmouseover = function () {
-  //   buttonElement.style.backgroundColor = "yellow";
-  //   buttonElement.style.color = "white";
-  // };
-  // buttonElement.onmouseout = function () {
-  //   buttonElement.style.backgroundColor = "white";
-  //   buttonElement.style.color = "black";
-  // };
-
-  // append button to ul
-  ulElement.appendChild(buttonElement);
+    // append button to ul
+    ulElement.appendChild(buttonElement);
+  }
 }
 
 // it's job is to render the products to the DOM
@@ -129,13 +112,14 @@ function renderProducts(products) {
   // render products
   products.forEach((product) => {
     const divElement = document.createElement("div");
-    divElement.classList.add("flex", "space-x-3");
+    divElement.classList.add("flex", "space-x-3", "shadow", "rounded");
 
     divElement.innerHTML = `
-  <img src="https://cdn.sanity.io/images/f5uukjzq/production/18d89cfa5552c60a11060d945db03db7d44c6b7b-3384x3076.jpg" class="w-32" />
+  <img src=${product.image} class="w-32" />
 
   <div>
-    <h2>${product.name}</h2>
+    <h2>${product.title}</h2>
+    <p>${product.description}</p>
     <span>${product.price}</span>
   </div>
   `;
@@ -143,3 +127,8 @@ function renderProducts(products) {
     productsParent.appendChild(divElement);
   });
 }
+
+window.onload = () => {
+  getCategories();
+  getProducts();
+};
